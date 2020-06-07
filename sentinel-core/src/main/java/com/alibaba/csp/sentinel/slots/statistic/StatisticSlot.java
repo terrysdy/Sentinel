@@ -58,6 +58,8 @@ public class StatisticSlot extends AbstractLinkedProcessorSlot<DefaultNode> {
             // Do some checking.
             fireEntry(context, resourceWrapper, node, count, prioritized, args);
 
+
+            // 统计 pass 信息
             // Request passed, add thread count and pass count.
             node.increaseThreadNum();
             node.addPassRequest(count);
@@ -94,6 +96,7 @@ public class StatisticSlot extends AbstractLinkedProcessorSlot<DefaultNode> {
                 handler.onPass(context, resourceWrapper, node, count, args);
             }
         } catch (BlockException e) {
+            // 统计 block 信息
             // Blocked, set block exception to current entry.
             context.getCurEntry().setError(e);
 
@@ -149,6 +152,7 @@ public class StatisticSlot extends AbstractLinkedProcessorSlot<DefaultNode> {
                 context.getCurEntry().getOriginNode().addRtAndSuccess(rt, count);
             }
 
+            // 退出后减少并发线程数
             node.decreaseThreadNum();
 
             if (context.getCurEntry().getOriginNode() != null) {

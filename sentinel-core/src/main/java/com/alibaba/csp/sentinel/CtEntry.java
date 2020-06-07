@@ -49,6 +49,7 @@ class CtEntry extends Entry {
         if (context instanceof NullContext) {
             return;
         }
+        // 设置 entry 父子关系
         this.parent = context.getCurEntry();
         if (parent != null) {
             ((CtEntry)parent).child = this;

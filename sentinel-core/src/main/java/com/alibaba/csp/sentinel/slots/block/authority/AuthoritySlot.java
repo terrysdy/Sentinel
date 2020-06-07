@@ -26,6 +26,7 @@ import com.alibaba.csp.sentinel.slotchain.ResourceWrapper;
 import com.alibaba.csp.sentinel.spi.SpiOrder;
 
 /**
+ * 黑白名单过滤
  * A {@link ProcessorSlot} that dedicates to {@link AuthorityRule} checking.
  *
  * @author leyou

@@ -45,6 +45,7 @@ public class CtSph implements Sph {
     private static final Object[] OBJECTS0 = new Object[0];
 
     /**
+     * 一个 resource 对应一个 slotChain
      * Same resource({@link ResourceWrapper#equals(Object)}) will share the same
      * {@link ProcessorSlotChain}, no matter in which {@link Context}.
      */
@@ -116,6 +117,7 @@ public class CtSph implements Sph {
 
     private Entry entryWithPriority(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)
         throws BlockException {
+        // 先从 ThreadLocal 获取 Context
         Context context = ContextUtil.getContext();
         if (context instanceof NullContext) {
             // The {@link NullContext} indicates that the amount of context has exceeded the threshold,
@@ -133,9 +135,20 @@ public class CtSph implements Sph {
             return new CtEntry(resourceWrapper, null, context);
         }
 
+        // 获取对应的 SlotChain，一个资源对应一个 SlotChain，一个个调用 slot 方法，执行不同的业务逻辑
+        // 默认顺序
+        // 1. NodeSelectorSlot.保存在一个线程内多次调用获取令牌（可能不同资源）的调用顺序
+        // 2. ClusterBuilderSlot.创建 ClusterNode（一个 resource一个），Node中保存了实时的统计信息
+        // 3. StatisticSlot.在 entry after/throw 的时候插入统计数据
+        // 4. AuthoritySlot.黑白名单权限校验，校验没通过抛 AuthorityException(extends BlockException)
+        // 5. SystemSlot.整个系统的流控，根据统一的ClusterNode统计信息流控
+        // 6. GatewayFlowSlot. todo
+        // 7. ParamFlowSlot. todo 热点参数流控
+        // 8. FlowSlot.根据ClusterNode统计信息，基于qps/并发线程数流控
+        // 9. DegradeSlot.根据ClusterNode统计信息，计算异常维度信息，是否走降级
         ProcessorSlot<Object> chain = lookProcessChain(resourceWrapper);
 
-        /*
+       /*
          * Means amount of resources (slot chain) exceeds {@link Constants.MAX_SLOT_CHAIN_SIZE},
          * so no rule checking will be done.
          */
@@ -143,6 +156,8 @@ public class CtSph implements Sph {
             return new CtEntry(resourceWrapper, null, context);
         }
 
+
+        // 执行 SlotChain entry
         Entry e = new CtEntry(resourceWrapper, chain, context);
         try {
             chain.entry(context, resourceWrapper, null, count, prioritized, args);
@@ -192,6 +207,7 @@ public class CtSph implements Sph {
      * @return {@link ProcessorSlotChain} of the resource
      */
     ProcessorSlot<Object> lookProcessChain(ResourceWrapper resourceWrapper) {
+        // 缓存 slotChain
         ProcessorSlotChain chain = chainMap.get(resourceWrapper);
         if (chain == null) {
             synchronized (LOCK) {

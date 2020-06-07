@@ -120,6 +120,7 @@ public class ContextUtil {
     protected static Context trueEnter(String name, String origin) {
         Context context = contextHolder.get();
         if (context == null) {
+            // 根据资源获取 node，并关联 node
             Map<String, DefaultNode> localCacheNameMap = contextNameNodeMap;
             DefaultNode node = localCacheNameMap.get(name);
             if (node == null) {

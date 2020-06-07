@@ -26,6 +26,7 @@ import com.alibaba.csp.sentinel.slotchain.ResourceWrapper;
 import com.alibaba.csp.sentinel.slots.nodeselector.NodeSelectorSlot;
 
 /**
+ * resource + context 维度
  * <p>
  * A {@link Node} used to hold statistics for specific resource name in the specific context.
  * Each distinct resource in each distinct {@link Context} will corresponding to a {@link DefaultNode}.
@@ -51,6 +52,7 @@ public class DefaultNode extends StatisticNode {
     private volatile Set<Node> childList = new HashSet<>();
 
     /**
+     * 同个 resource 同个 ClusterNode，保存当前 resource 统计信息
      * Associated cluster node.
      */
     private ClusterNode clusterNode;

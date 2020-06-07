@@ -27,6 +27,7 @@ import com.alibaba.csp.sentinel.slots.statistic.base.LongAdder;
  */
 public class MetricBucket {
 
+    // 个数统计最终落到 LongAdder
     private final LongAdder[] counters;
 
     private volatile long minRt;

@@ -28,6 +28,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class WebMvcDemoApplication {
 
     public static void main(String[] args) {
+        System.setProperty("project.name","springmvc-demo");
         SpringApplication.run(WebMvcDemoApplication.class);
     }
 }

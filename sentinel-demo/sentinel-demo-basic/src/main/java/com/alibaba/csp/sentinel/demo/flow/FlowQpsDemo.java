@@ -42,7 +42,7 @@ public class FlowQpsDemo {
 
     private static volatile boolean stop = false;
 
-    private static final int threadCount = 32;
+    private static final int threadCount = 1;
 
     private static int seconds = 60 + 40;
 
@@ -64,6 +64,7 @@ public class FlowQpsDemo {
         rule1.setResource(KEY);
         // set limit qps to 20
         rule1.setCount(20);
+        // 根据 qps 限流
         rule1.setGrade(RuleConstant.FLOW_GRADE_QPS);
         rule1.setLimitApp("default");
         rules.add(rule1);

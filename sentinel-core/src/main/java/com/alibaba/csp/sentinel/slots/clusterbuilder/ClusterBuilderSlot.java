@@ -49,6 +49,7 @@ import com.alibaba.csp.sentinel.spi.SpiOrder;
 public class ClusterBuilderSlot extends AbstractLinkedProcessorSlot<DefaultNode> {
 
     /**
+     * 同一个 resource 共享同一个 ClusterNode
      * <p>
      * Remember that same resource({@link ResourceWrapper#equals(Object)}) will share
      * the same {@link ProcessorSlotChain} globally, no matter in witch context. So if

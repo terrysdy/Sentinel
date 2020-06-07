@@ -24,6 +24,7 @@ import com.alibaba.csp.sentinel.slots.statistic.metric.DebugSupport;
 import com.alibaba.csp.sentinel.util.function.Predicate;
 
 /**
+ * 保存资源的实时统计信息
  * Holds real-time statistics for resources.
  *
  * @author qinan.qn

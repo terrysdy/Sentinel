@@ -44,4 +44,7 @@ public class SentinelSpringMvcBlockHandlerConfig {
         // Return the customized result.
         return ResultWrapper.blocked();
     }
+
+
+
 }

@@ -62,11 +62,13 @@ public class Context {
     private final String name;
 
     /**
+     * 当前调用的统计信息。同一个资源共享
      * The entrance node of current invocation tree.
      */
     private DefaultNode entranceNode;
 
     /**
+     * 可能会有父子关系。在一个线程内的同一个 context 里可能会调用多个 resource 的 entry
      * Current processing entry.
      */
     private Entry curEntry;
